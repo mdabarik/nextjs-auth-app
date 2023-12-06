@@ -1,12 +1,12 @@
-import RegisterForm from '@/components/RegisterForm';
-import React from 'react';
+import RegisterForm from "@/components/RegisterForm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
-const Register = () => {
-    return (
-        <div>
-            <RegisterForm></RegisterForm>
-        </div>
-    );
-};
+export default async function Register() {
+  const session = await getServerSession(authOptions);
 
-export default Register;
+  if (session) redirect("/dashboard");
+
+  return <RegisterForm />;
+}
