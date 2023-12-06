@@ -17,6 +17,23 @@ const RegisterForm = () => {
         }
 
         try {
+
+            /** if user exists */
+            const resUserExists = await fetch("api/userExists", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const { user } = await resUserExists.json();
+            if (user) {
+                setError("User already exists");
+                return;
+            }
+
+            /* user does not exist */
             const res = await fetch("api/register", {
                 method: "POST",
                 headers: {
@@ -33,7 +50,7 @@ const RegisterForm = () => {
             } else {
                 console.log("user registration failed");
             }
-        } catch(error) {
+        } catch (error) {
             console.log("Error during registration failed.");
         }
 
@@ -47,7 +64,7 @@ const RegisterForm = () => {
                     <input onChange={e => setName(e.target.value)} type="text" placeholder="Full Name" />
                     <input onChange={e => setEmail(e.target.value)} type="text" placeholder="Email Address" />
                     <input onChange={e => setPassword(e.target.value)} type="password" placeholder="Password" />
-                    <button type="submit" className="bg-green-500 text-white font-bold cursor-pointer px-6 py-2">Login</button>
+                    <button type="submit" className="bg-green-500 text-white font-bold cursor-pointer px-6 py-2">Register</button>
 
                     {
                         error ?
